@@ -7,7 +7,8 @@ $(function() {
                 type: 'line'
             },
             stroke: {
-                curve: 'straight'
+                curve: 'straight',
+                width: 2,
             },
             series: [{
                 name: "Prices",
@@ -21,15 +22,15 @@ $(function() {
             },
             xaxis: {
                 categories: times,
-                tickAmount: 20
+                tickAmount: 20,
+                type: 'time',
+                title: {
+                    text: 'Day Session Time'
+                }
             },
             title: {
                 text: title,
-                style: {
-                    fontSize: '12px',
-                    fontFamily: 'Helvetica, Arial, sans-serif',
-                    cssClass: 'apexcharts-xaxis-title',
-                },
+                align: 'center'
             }
         }
     }

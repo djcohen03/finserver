@@ -13,5 +13,4 @@ $(function() {
             $('.tradables-list > .list-group-item').show();
         }
     });
-
-})
+});
