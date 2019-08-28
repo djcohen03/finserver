@@ -2,7 +2,7 @@ import json
 import datetime
 from dateutil.relativedelta import relativedelta
 from flask import Flask, render_template
-from .fincore.db.models import Tradable, session
+from fincore.db.models import Tradable, session
 
 app = Flask(__name__, template_folder="static/templates")
 
@@ -87,3 +87,8 @@ def daysession(id, datestr):
         'prices': prices,
         'times': times
     }), 200
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5001)
+
+
