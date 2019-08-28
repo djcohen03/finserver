@@ -1,0 +1,27 @@
+{% extends '_base.html' %}
+{% block body %}
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li class="active">{{ tradable.name }}</li>
+</ol>
+
+
+
+<div class="page-header">
+    <h1>{{ tradable.name }} Data</h1>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        <div class="list-group">
+            {% for date, display in dates %}
+            <a href="/tradable/{{ tradable.id }}/{{ date }}" class="list-group-item">
+                {{ display }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

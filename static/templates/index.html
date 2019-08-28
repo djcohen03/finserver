@@ -1,0 +1,25 @@
+{% extends '_base.html' %}
+
+{% block body %}
+
+<ol class="breadcrumb">
+    <li class="active">Home</li>
+</ol>
+
+<div class="page-header">
+    <h1>AlphaVantage API Data <small>({{ gigabytes }}GB)</small> </h1>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        <div class="list-group">
+            {% for tradable in tradables %}
+            <a href="/tradable/{{ tradable.id }}" class="list-group-item">
+                {{ tradable.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

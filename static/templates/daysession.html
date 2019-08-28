@@ -1,0 +1,24 @@
+{% extends '_base.html' %}
+{% block body %}
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/tradable/{{ tradable.id }}">{{ tradable.name }}</a></li>
+    <li class="active">{{ date }}</li>
+</ol>
+
+
+<div class="page-header">
+    <h1>{{ tradable.name }} {{ date }} Data</h1>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+    var prices = {{ prices | tojson | safe }};
+    var times = {{ times | tojson | safe }};
+</script>
+{% endblock %}
