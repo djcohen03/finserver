@@ -1,6 +1,6 @@
 $(function() {
 
-    var makeOptions = (prices, times, title) => {
+    var makeOptions = (prices, times, title, lastprice) => {
         return {
             chart: {
                 height: 350,
@@ -9,10 +9,15 @@ $(function() {
             stroke: {
                 curve: 'straight',
                 width: 2,
+                dashArray: [0, 5],
+                colors: ['#2E93fA', '#999999']
             },
             series: [{
                 name: "Prices",
                 data: prices
+            }, {
+              name: 'Previous Close',
+              data: times.map(() => lastprice)
             }],
             grid: {
                 row: {
@@ -44,7 +49,7 @@ $(function() {
             success: response => {
                 var data = JSON.parse(response);
                 var title = `${data.tradable}: ${data.date}`;
-                var options = makeOptions(data.prices, data.times, title);
+                var options = makeOptions(data.prices, data.times, title, data.lastprice);
 
                 if (chart === null) {
                     chart = new ApexCharts(chartElement, options);
