@@ -48,6 +48,23 @@ class Helpers(object):
         gigabytes = memory / (1000. ** 3)
         return round(gigabytes, 2)
 
+    @classmethod
+    def getlastclose(cls, tradable, date):
+        ''' Runs a query to get the last close for the given tradable before
+            the given date
+        '''
+        query = session.execute('''
+            SELECT close, time FROM price WHERE request_id IN (
+                SELECT id FROM price_request WHERE tradable_id=%s
+            ) AND time < '%s' order by time desc limit 1;
+        ''' % (
+            tradable.id,
+            date.strftime('%Y-%m-%d')
+        ))
+        price, time = [(float(p), t) for (p, t) in query][0]
+        return price, time
+
+
 
 @app.route('/')
 def index():
@@ -81,11 +98,13 @@ def daysession(id, datestr):
     date = datetime.datetime.strptime(datestr, '%Y-%m-%d')
     prices, timestamps = Helpers.getdaysession(tradable, date)
     times = [ts.strftime('%H:%M') for ts in timestamps]
+    lastprice, _ = Helpers.getlastclose(tradable, date)
     return json.dumps({
         'tradable': tradable.name,
         'date': datestr,
         'prices': prices,
-        'times': times
+        'times': times,
+        'lastprice': lastprice
     }), 200
 
 if __name__ == '__main__':
