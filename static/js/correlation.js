@@ -64,13 +64,22 @@ $(function() {
 
 
 
-
     $('#correlation-submit').click(function () {
+        var symbols = getSelected();
+
+        // Make sure not too many are selected:
+        if (symbols.length > 40) {
+            FLASH.error('Please Limit to 40 Items');
+            return
+        }
+
+
+
         // Disable this button:
         $(this).addClass('disabled');
 
         var args = {
-            'symbols': getSelected()
+            'symbols': symbols
         }
         var container = $('#table-container');
         var loading = '<p class="text-center">Loading...</p>'
@@ -82,11 +91,12 @@ $(function() {
                 var data = JSON.parse(response);
                 var matrix = data.correlations;
                 var table = makeTable(data.symbols, matrix);
-                container.html(table)
+                container.html(table);
+
             },
             error: response => {
-                console.error(response)
-                container.html('Error');
+                container.html('');
+                FLASH.error('An Error Occurred, Please Try Again Later');
             }
         });
     });

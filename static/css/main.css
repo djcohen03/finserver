@@ -13,3 +13,10 @@ body {
 .page-header .search-tradables {
     margin-top: 30px;
 }
+
+#flash-messages {
+    position: fixed;
+    bottom: 0px;
+    right: 20px;
+    width: 500px;
+}
