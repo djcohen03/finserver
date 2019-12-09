@@ -1,8 +1,10 @@
 import json
 import datetime
 from dateutil.relativedelta import relativedelta
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from fincore.db.models import Tradable, session
+from correlations import Correlations
+
 
 app = Flask(__name__, template_folder="static/templates")
 
@@ -88,6 +90,14 @@ def tradable(id):
     dates.reverse()
     return render_template('tradable.html', tradable=tradable, dates=dates)
 
+@app.route('/correlation')
+def correlation():
+    '''
+    '''
+    tradables = session.query(Tradable).all()
+    tradables.sort(key=lambda t: t.name)
+    return render_template('correlation.html', tradables=tradables)
+
 
 # MARK: Api Endpoints:
 @app.route('/api/v1/tradable/<int:id>/<datestr>')
@@ -107,7 +117,22 @@ def daysession(id, datestr):
         'lastprice': lastprice
     }), 200
 
+
+@app.route('/api/v1/correlation')
+def correlationapi():
+    ''' API For getting prices on a given day
+    '''
+    symbols = request.args.getlist('symbols[]')
+
+    # Make correlation matrix:
+    correlations = Correlations.matrix(symbols)
+
+    return json.dumps({
+        'correlations': correlations,
+        'symbols': symbols,
+    }), 200
+
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
-
-

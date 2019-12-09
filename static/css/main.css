@@ -2,6 +2,14 @@ body {
     padding: 20px;
 }
 
-.fetch-chart {
+.list-group > a {
     cursor: pointer;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.page-header .search-tradables {
+    margin-top: 30px;
 }
