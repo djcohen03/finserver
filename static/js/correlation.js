@@ -38,9 +38,28 @@ $(function() {
 
     var tableUI = {
         th: item => `<th>${item}</th>`,
-        td: item => `<td>${item}</td>`,
+        td: (item, colored) => {
+            if (colored) {
+                return `<td style='background:${tableUI.color(item)}'>${item}</td>`
+            } else {
+                return `<td>${item}</td>`
+            }
+        },
         trh: items => `<tr>${items.map(tableUI.th).join('')}</tr>`,
-        tr: items => `<tr>${items.map(tableUI.td).join('')}</tr>`,
+        tr: (items, colored) => {
+            return `<tr>${items.map(item => tableUI.td(item, colored)).join('')}</tr>`
+        },
+        color: value => {
+            var scalar = 255 - Math.abs(parseInt(value * 255));
+            if (value > 0) {
+                // Green based:
+                return `rgba(${scalar}, 255, ${scalar}, 0.5)`;
+            } else {
+                // Red base:
+                return `rgba(255, ${scalar}, ${scalar}, 0.5)`;
+            }
+
+        }
     }
 
     var makeTable = (symbols, matrix) => {
@@ -48,7 +67,7 @@ $(function() {
         var thead = tableUI.trh([''].concat(symbols));
         var tbody = matrix.map((row, index) => {
             var symbol = `<b>${symbols[index]}</b>`;
-            return tableUI.tr([symbol].concat(row));
+            return tableUI.tr([symbol].concat(row), true);
         }).join('');
 
         return `
