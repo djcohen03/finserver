@@ -14,7 +14,7 @@ class Helpers(object):
         ''' Get's the prices for the given tradable on the given day
         '''
         query = session.execute('''
-            SELECT close, time FROM price WHERE request_id IN (
+            SELECT time, close FROM price WHERE request_id IN (
                 SELECT id FROM price_request WHERE tradable_id = %s
             )
             AND time > '%s'
@@ -25,7 +25,7 @@ class Helpers(object):
             (date + relativedelta(days=1)).strftime('%Y-%m-%d'),
         ))
         # Unpack the query results:
-        prices, times = zip(*[(float(v), t) for (v, t) in query])
+        prices, times = zip(*[(float(v), t) for (t, v) in sorted(query)])
         return prices, times
 
     @classmethod
