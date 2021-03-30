@@ -99,9 +99,17 @@ def login():
 def logout():
     ''' Login Endpoint API
     '''
+    # Do deauthentication:
     FlaskAuth.deauthenticate()
+
+    # Make response & drop all cookies:
+    response = make_response()
+    for cookie, value in request.cookies.iteritems():
+        response.set_cookie(cookie, '')
+    response.headers['location'] = '/login'
+
     flash('Successfully Logged Out', 'info')
-    return redirect('/login')
+    return response, 302
 
 @app.route('/')
 def index():
