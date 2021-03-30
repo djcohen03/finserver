@@ -7,7 +7,6 @@ class FlaskAuth(object):
     def checkauth(cls):
         ''' Check User Authentication
         '''
-        print 'Checking..'
         path = request.path
         if path.startswith('/static') or path.startswith('/login') or path.startswith('/logout'):
             return
