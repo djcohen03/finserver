@@ -1,12 +1,16 @@
+import os
 import json
 import datetime
 from dateutil.relativedelta import relativedelta
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect, make_response
 from fincore.db.models import Tradable, session
 from correlations import Correlations
-
+from auth import FlaskAuth
 
 app = Flask(__name__, template_folder="static/templates")
+
+# Set app secret key for message flashing:
+app.secret_key = os.urandom(24)
 
 class Helpers(object):
     @classmethod
@@ -67,6 +71,37 @@ class Helpers(object):
         return price, time
 
 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    ''' Login Endpoint API
+    '''
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        username = request.form.get('username')
+        password = request.form.get('password')
+        auth = FlaskAuth.authenticate(username, password)
+        if auth:
+            response = make_response()
+            for cookie, value in auth.cookies.iteritems():
+                response.set_cookie(cookie, value)
+
+            response.headers['location'] = '/'
+
+            flash('Credential Accepted', 'success')
+            return response, 302
+        else:
+            flash('Incorrect Username/Password', 'error')
+            return redirect('/login')
+
+@app.route('/logout')
+def logout():
+    ''' Login Endpoint API
+    '''
+    FlaskAuth.deauthenticate()
+    flash('Successfully Logged Out', 'info')
+    return redirect('/login')
 
 @app.route('/')
 def index():
@@ -133,6 +168,8 @@ def correlationapi():
     }), 200
 
 
+# Setup authentication:
+app.before_request(FlaskAuth.checkauth)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)

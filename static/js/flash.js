@@ -29,6 +29,10 @@ var FLASH = (() => {
     var methods = {};
     methods.success = (message) => _flash(message, 'success');
     methods.error = (message) => _flash(message, 'danger');
+    methods.info = (message) => _flash(message, 'info');
 
     return methods;
 })();
+
+// Flash Flask Messages:
+$(() => flaskMessges.forEach(item => FLASH[item.category](item.message)))
