@@ -13,6 +13,7 @@ class FlaskAuth(object):
         else:
             # Restrict All Other Endpoints:
             if not cls.authenticated():
+                print 'Warning: Unauthenicated User Attempted To Access Resource: %s' % path
                 flash('Login Required', 'error')
                 return redirect('/login')
 
