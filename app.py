@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 import datetime
 from dateutil.relativedelta import relativedelta
 from flask import Flask, render_template, request, flash, redirect, make_response
@@ -11,6 +12,10 @@ app = Flask(__name__, template_folder="static/templates")
 
 # Set app secret key for message flashing:
 app.secret_key = os.urandom(24)
+
+# Initialize Logging:
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger('finserver')
 
 class Helpers(object):
     @classmethod

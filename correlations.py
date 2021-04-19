@@ -1,6 +1,9 @@
+import logging
 import datetime
 import pandas as pd
 from fincore.db.models import Tradable, session, engine
+
+log = logging.getLogger('finserver.correlations')
 
 
 class Helpers(object):
@@ -26,7 +29,7 @@ class Helpers(object):
         )
 
         # Do Prices table query:
-        print 'Querying Prices Table...'
+        log.info('Querying Prices Table...')
         prices = pd.read_sql(query, engine).sort_values('time')
         prices['time'] = pd.to_datetime(prices['time'])
 

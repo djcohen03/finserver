@@ -1,6 +1,8 @@
+import logging
 import requests
 from flask import request, redirect, flash, session
 
+log = logging.getLogger('finserver.auth')
 
 class FlaskAuth(object):
     @classmethod
@@ -13,7 +15,7 @@ class FlaskAuth(object):
         else:
             # Restrict All Other Endpoints:
             if not cls.authenticated():
-                print 'Warning: Unauthenicated User Attempted To Access Resource: %s' % path
+                log.warning('Unauthenicated User Attempted To Access Resource: %s' % path)
                 flash('Login Required', 'error')
                 return redirect('/login')
 
