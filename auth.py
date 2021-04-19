@@ -27,6 +27,7 @@ class FlaskAuth(object):
             data = {'username': username, 'password': password}
             response = requests.post('http://localhost:5003/api/login', data=data, cookies=request.cookies)
             if response.json().get('user'):
+                log.info('User %s Has Successfully Authenticated [IP: %s]' % (username, request.remote_addr))
                 return response
             else:
                 False
